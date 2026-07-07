@@ -1,0 +1,26 @@
+kind: 'CDN'
+version: '1'
+data:
+  originSelectors:
+    rules:
+      - name: route-to-publish-delivery-redirect-maps
+        when:
+          allOf:
+            - { reqProperty: tier, equals: "publish" }
+            - { reqProperty: domain, equals: "www.example.com" }
+            - { reqProperty: method, in: ["GET", "HEAD"] } # redirects are a navigation concern; don't drop POST/PUT bodies on the loopback
+            - { reqProperty: originalPath, matches: '(/[^./]+|\.html|/)$' } # page URLs only (.html, extensionless, or trailing slash) — not static assets
+            - { reqHeader: x-edgefunction-request, exists: false } # skip when loopback re-entry: let CDN route to AEMaaCS publish
+        action:
+          type: selectAemOrigin
+          originName: edgefunction-publish-delivery-redirect-maps
+
+# Notes
+# -----
+# * The originalPath matcher already limits routing to page-like URLs. If you
+#   only migrate a known URL space (e.g. an old domain or a set of pre-migration
+#   prefixes), tighten it further so unrelated traffic never enters the function.
+# * The maintenance endpoint (/__redirectmaps-maintenance) is a GET and is
+#   matched by this rule, so calling it on www.example.com reaches the function.
+#   The function's own source fetch sets x-edgefunction-request, so it falls
+#   through to AEMaaCS publish instead of looping back.
