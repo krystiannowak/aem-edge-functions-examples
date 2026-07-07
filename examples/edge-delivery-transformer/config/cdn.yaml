@@ -1,0 +1,14 @@
+kind: 'CDN'
+version: '1'
+data:
+  originSelectors:
+    rules:
+      - name: route-to-edge-delivery-transformer
+        when: 
+          allOf:
+            - { reqProperty: tier, equals: "publish" }
+            - { reqProperty: domain, equals: "www.example.com" }
+            - { reqProperty: originalPath, matches: '(/[^./]+|\.html|/)$' } # routed extensions, with .html extension or without extension
+        action:
+          type: selectAemOrigin
+          originName: edgefunction-edge-delivery-transformer

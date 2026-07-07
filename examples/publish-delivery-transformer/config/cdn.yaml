@@ -1,0 +1,15 @@
+kind: 'CDN'
+version: '1'
+data:
+  originSelectors:
+    rules:
+      - name: route-to-publish-delivery-transformer
+        when:
+          allOf:
+            - { reqProperty: tier, equals: "publish" }
+            - { reqProperty: domain, equals: "www.example.com" }
+            - { reqProperty: originalPath, matches: '(/[^./]+|\.html|/)$' } # HTML pages only (.html, extensionless, or trailing slash)
+            - { reqHeader: x-edgefunction-request, exists: false } # skip when loopback re-entry: let CDN route to AEMaaCS publish
+        action:
+          type: selectAemOrigin
+          originName: edgefunction-publish-delivery-transformer
