@@ -1,0 +1,35 @@
+# Sample redirect map — Apache RewriteMap format
+# Format: source-path target-path (whitespace-separated); # comments and blank lines ignored.
+#
+# Upload/publish this as a DAM asset at the sourcePath configured in src/config.js
+# (default: /content/dam/redirects/sample-redirects.txt).
+
+/old-home /
+/about-us /company/about
+/contact-us /company/contact
+/careers /company/jobs
+/press /company/newsroom
+/blog /insights
+/blog/2023 /insights/archive/2023
+/blog/2024 /insights/archive/2024
+/blog/welcome-post /insights/getting-started
+/products/legacy-widget /products/widget-pro
+/products/old-gadget /products/gadget-x
+/services/consulting /solutions/consulting
+/services/support /support
+/help/faq /support/faq
+/help/documentation /docs
+/resources/whitepapers /insights/whitepapers
+/partners /company/partners
+/legal /company/legal
+/privacy /company/legal/privacy-policy
+/terms /company/legal/terms-of-service
+/news /company/newsroom
+/events /company/events
+/signup /account/register
+/login /account/sign-in
+/cart /shop/cart
+/store-locator /locations
+/downloads /support/downloads
+/api-docs /developers/api
+/promo https://campaign.example.com/promo

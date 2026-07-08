@@ -1,0 +1,31 @@
+# This file describes a Fastly Compute package. To learn more visit:
+# https://www.fastly.com/documentation/reference/compute/fastly-toml
+
+authors = []
+cloned_from = "https://github.com/fastly/compute-starter-kit-javascript-empty"
+description = "AEMaaCS publish delivery redirect maps (KV-sharded, with maintenance endpoint)"
+language = "javascript"
+manifest_version = 3
+name = "publish-delivery-redirect-maps"
+service_id = ""
+
+[scripts]
+  build = "npm run build"
+  post_init = "npm install"
+
+# Local development server configuration for `aio aem edge-functions serve`.
+# Pre-populates kv_default with a couple of sample shards so redirect lookups
+# work locally without first running the maintenance endpoint. In a deployed
+# environment the maintenance endpoint populates all shards.
+#
+# Shard keys are the FNV-1a hash (mod 256) of the source path, as hex:
+#   /old-home -> shard 1d, /about-us -> shard b6
+[local_server]
+  [local_server.kv_stores]
+    kv_default = [
+      { key = "map:legacy:shard:1d", data = '{"/old-home":"/"}' },
+      { key = "map:legacy:hash:1d", data = "sample-hash-1d" },
+      { key = "map:legacy:shard:b6", data = '{"/about-us":"/company/about"}' },
+      { key = "map:legacy:hash:b6", data = "sample-hash-b6" },
+      { key = "maintenance:cursor", data = "0" },
+    ]

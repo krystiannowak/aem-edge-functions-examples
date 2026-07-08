@@ -1,0 +1,8 @@
+kind: "EdgeFunctions"
+version: "1"
+data:
+  services:
+    - name: publish-delivery-redirect-maps
+  # The redirect lookup and maintenance handler store sharded redirect data in
+  # the KV store, so it must be enabled for this service.
+  kvs: true
